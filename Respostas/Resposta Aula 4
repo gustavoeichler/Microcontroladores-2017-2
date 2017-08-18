@@ -39,5 +39,10 @@ Mov.w R12,4(R9)
 ADD.w R4,R4
 Add.w R6,R6
 Add.w R6,R6
-Sub
+Sub.w R4,R6
+Mov.w R6,6(R9)
 (f) A[3] = 2*(f - 2*h);
+ADD.w R6,R6
+Sub.w R4,R6
+Add.w R6,R6
+Mov.w R6,6(R9)
