@@ -31,6 +31,13 @@ ADD.w R11,R5
 Add.w R6,R6
 Add.w R6,R6
 (d) A[2] = A[1] + A[0]; 
-Mov.b
+Mov.w 0(R9),R11
+Mov.w 2(R9),R12
+Add.w R11,R12
+Mov.w R12,4(R9)
 (e) A[3] = 2*f - 4*h; 
+ADD.w R4,R4
+Add.w R6,R6
+Add.w R6,R6
+Sub
 (f) A[3] = 2*(f - 2*h);
