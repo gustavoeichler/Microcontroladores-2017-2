@@ -1,8 +1,8 @@
-Para as questıes 2 a 5, considere que as vari·veis f, g, h, i e j s„o do tipo inteiro (16 bits na arquitetura do MSP430), e que o vetor A[] È do tipo inteiro. 
-Estas vari·veis est„o armazenadas nos seguintes registradores: f: R4 g: R5 h: R6 i: R7 j: R8 A: R9 
-Utilize os registradores R11, R12, R13, R14 e R15 para armazenar valores tempor·rios.
+Para as quest√µes 2 a 5, considere que as vari√°veis f, g, h, i e j s√£o do tipo inteiro (16 bits na arquitetura do MSP430), e que o vetor A[] √© do tipo inteiro. 
+Estas vari√°veis est√£o armazenadas nos seguintes registradores: f: R4 g: R5 h: R6 i: R7 j: R8 A: R9 
+Utilize os registradores R11, R12, R13, R14 e R15 para armazenar valores tempor√°rios.
 
-1)Escreva os trechos de cÛdigo assembly do MSP430 para: 
+1)Escreva os trechos de c√≥digo assembly do MSP430 para: 
 (a) Somente setar o bit menos significativo de R5. 
 R:
 BIT.W	#1,R5
@@ -24,7 +24,7 @@ XOR.W #61440,R10
 BIT.W #15,R10
 
 
-2)"Traduza" o seguinte trecho de cÛdigo em C para o assembly do MSP430:
+2)"Traduza" o seguinte trecho de c√≥digo em C para o assembly do MSP430:
 
 if(i>j) f = g+h+10;
 else f = g-h-10;
@@ -42,19 +42,22 @@ ELSE:
 	MOV.W R5,R4
 
 
-3)"Traduza" o seguinte trecho de cÛdigo em C para o assembly do MSP430:
+3)"Traduza" o seguinte trecho de c√≥digo em C para o assembly do MSP430:
 while(save[i]!=k) i++;
-WHILE:
-	MOV.W R7,R12 
-	RLA R12 ; R12 = 2*i
-	ADD.W R10,R12 ; 
-	CMP 0(R12),R9 ; compara save [i] com 
-	JEQ EXIT ; save [i] == k ?
-	INC.W R7  ; i++
-	JMP WHILE
-EXIT:
+utilizando R13 como um registrador que cont√©m o valor de k 
+while:
+	MOV.W R7, R12   ; Movendo R7 para um Reg Aux
+	RLA R12         ; i = i*2	
+	ADD.W R9, R12   ; Vetor r9 = r9 + r12 (r9 √© o vetor posi√ß√£o de mem√≥ria)
+	CMP 0(R12), R13 ; Comparando o valor em na posi√ß√£o R12 com o valor de k(r13)
+	JEQ FIM		; Caso o valor seja igual pula para fim
+	INC.W R7	; i = i+1
+	JMP while	; volta pro inicio do loop
 
-4)"Traduza" o seguinte trecho de cÛdigo em C para o assembly do MSP430:
+FIM:
+
+
+4)"Traduza" o seguinte trecho de c√≥digo em C para o assembly do MSP430:
 for(i=0; i<100; i++) A[i] = i*2;
 R:
 	MOV.W #0,R7
@@ -76,7 +79,7 @@ FOR	:
 END	:	
 
 
-5)"Traduza" o seguinte trecho de cÛdigo em C para o assembly do MSP430:
+5)"Traduza" o seguinte trecho de c√≥digo em C para o assembly do MSP430:
 for(i=99; i>=0; i--) A[i] = i*2;
 mov.w #99,R7
 FOR:
