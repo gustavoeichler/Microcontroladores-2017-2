@@ -1,0 +1,94 @@
+Para as questões 2 a 5, considere que as variáveis f, g, h, i e j são do tipo inteiro (16 bits na arquitetura do MSP430), e que o vetor A[] é do tipo inteiro. 
+Estas variáveis estão armazenadas nos seguintes registradores: f: R4 g: R5 h: R6 i: R7 j: R8 A: R9 
+Utilize os registradores R11, R12, R13, R14 e R15 para armazenar valores temporários.
+
+1)Escreva os trechos de código assembly do MSP430 para: 
+(a) Somente setar o bit menos significativo de R5. 
+R:
+BIT.W	#1,R5
+(b) Somente setar dois bits de R6: o menos significativo e o segundo menos significativo. 
+R:
+BIT.W	#3,R6
+(c) Somente zerar o terceiro bit menos significativo de R7. 
+R:
+BIC.W	#4,R7
+(d) Somente zerar o terceiro e o quarto bits menos significativo de R8. 
+R:
+BIC.W	#12,R8
+(e) Somente inverter o bit mais significativo de R9. 
+R:
+XOR.W #32768,R9
+(f) Inverter o nibble mais significativo de R10, e setar o nibble menos significativo de R10.
+R:
+XOR.W #61440,R10
+BIT.W #15,R10
+
+
+2)"Traduza" o seguinte trecho de código em C para o assembly do MSP430:
+
+if(i>j) f = g+h+10;
+else f = g-h-10;
+R:
+	MOV.W #10,R11
+	CMP R7,R8
+	JEQ ELSE
+	JL ELSE
+	ADD.W R11,R6
+	ADD.W R6,R5
+	MOV.W R5,R4
+ELSE:
+	SUB.W R6,R5
+	SUB.W R11,R5
+	MOV.W R5,R4
+
+
+3)"Traduza" o seguinte trecho de código em C para o assembly do MSP430:
+while(save[i]!=k) i++;
+WHILE:
+	MOV.W R7,R12 
+	RLA R12 ; R12 = 2*i
+	ADD.W R10,R12 ; 
+	CMP 0(R12),R9 ; compara save [i] com 
+	JEQ EXIT ; save [i] == k ?
+	INC.W R7  ; i++
+	JMP WHILE
+EXIT:
+
+4)"Traduza" o seguinte trecho de código em C para o assembly do MSP430:
+for(i=0; i<100; i++) A[i] = i*2;
+R:
+	MOV.W #0,R7
+	MOV.W #100,R11
+FOR	:
+	CMP R7,R11
+	JGE  END
+	MOV.W R7,R12
+	RLA R12 ; R12= i*2
+	MOV.W R12,R13
+	ADD.W R9,R13 ; R13= ADDRESS(A) + R12
+	MOV.W R12,0(R13); A[i]= 2*1
+	INC.W R7
+	JMP   FOR
+
+	
+	 
+
+END	:	
+
+
+5)"Traduza" o seguinte trecho de código em C para o assembly do MSP430:
+for(i=99; i>=0; i--) A[i] = i*2;
+mov.w #99,R7
+FOR:
+
+	CMP #0, R7 ; compare i with 0
+	JL END ; if i < 0, go to exit
+	MOV.W R7,R12 ; 
+	RLA R12 ; R12 = 2*i
+	MOV.W R12,R13
+	ADD.W R9,R13 ; R13 = ADDRESS (A) + R12
+	MOV.W R12,0(R13);  A[i] = 2*i
+	DEC.W R7 ;
+	jmp FOR 
+
+END:
