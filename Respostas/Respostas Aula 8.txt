@@ -1,0 +1,166 @@
+﻿#include <msp430.h>
+
+
+int main(void) {
+    WDTCTL = WDTPW | WDTHOLD;                                                // Desligar WatchDog Timer
+    P1OUT = 0x00;
+    P1DIR |= 0xFF;                                                  //Sempre devemos colocar os pinos não utilizados em modo de saída
+    P1DIR &= ~BIT3;                                             //depois apagamos os pinos que serão utilizados como entrada
+    P1REN |= BIT3 + BIT6;                                              //Ligar o resistor conectado ao pino 3.
+    P1OUT |= BIT3 + BIT6;                                              // O Registrador PxOUT pode ser mudado independente da direção de PxDIR
+    P1DIR &= ~BIT6;                                             //depois apagamos os pinos que serão utilizados como entrada
+                                                   //Ligar o resistor conectado ao pino 3.
+      P1OUT |= BIT6;
+
+
+    for(;;){
+        while((P1IN & BIT0) != 0);
+            P1OUT ^= BIT0;
+            _delay_cycles(100000);
+            while((P1IN & BIT0) == 0);
+                       P1OUT ^= BIT0;
+                       _delay_cycles(100000);
+
+
+    }
+
+
+    return 0;
+}
+
+
+
+
+
+
+2)
+#include <msp430.h>
+
+
+int main(void) {
+    WDTCTL = WDTPW | WDTHOLD;                                                // Desligar WatchDog Timer
+    P1OUT = 0x00;
+    P1DIR |= 0xFF;                                                  //Sempre devemos colocar os pinos não
+utilizados em modo de saída
+    P1DIR &= ~BIT3;                                             //depois apagamos os pinos que serão utilizados como entrada
+    P1REN |= BIT3 + BIT6;                                              //Ligar o resistor conectado ao pino 3.
+    P1OUT |= BIT3 + BIT6;                                              // O Registrador PxOUT pode ser mudado independente da direção de PxDIR
+    P1DIR &= ~BIT6;                                             //depois apagamos os pinos que serão utilizados como entrada
+                                                   //Ligar o resistor conectado ao pino 3.
+      P1OUT |= BIT6;
+
+
+    for(;;){
+        while((P1IN & BIT0) != 0);
+            P1OUT ^= BIT0;
+            _delay_cycles(400000);
+            while((P1IN & BIT0) == 0);
+                       P1OUT ^= BIT0;
+                       _delay_cycles(200000);
+
+
+    }
+
+
+    return 0;
+}
+
+
+
+
+
+
+3)
+
+
+#include <msp430g2553.h>
+#define LED1 BIT0
+#define LED2 BIT6
+#define LEDS (LED1|LED2)
+#define BTN  BIT3
+
+
+void atraso(volatile unsigned int i)
+{
+    while((i--)>0);
+}
+
+
+int main(void)
+{
+    WDTCTL = WDTPW | WDTHOLD;
+    P1DIR |= LEDS;
+    P1REN |= BIT3;
+    while(1){
+        if((P1IN & BIT3) == 0)
+             P1OUT |= BIT0;
+        else
+             P1OUT &= ~BIT0;
+    }
+    return 0;
+}
+
+
+4)
+
+
+#include <msp430g2553.h>
+#define LED1 BIT0
+#define LED2 BIT6
+#define LEDS (LED1|LED2)
+#define BTN  BIT3
+
+
+void atraso(volatile unsigned int i)
+{
+    while((i--)>0);
+}
+
+
+int main(void)
+{
+    WDTCTL = WDTPW | WDTHOLD;
+    P1DIR |= LEDS;
+    P1REN |= BIT3;
+    while(1){
+        if((P1IN & BIT3) == 0)
+            P1OUT |= LEDS;
+            atraso(0xffff);
+            P1OUT &= ~LEDS;
+            atraso(0xffff);
+    }
+    return 0;
+}
+
+
+5)
+
+
+#include <msp430g2553.h>
+#define LED1 BIT0
+#define LED2 BIT6
+#define LEDS (LED1|LED2)
+#define BTN  BIT3
+
+
+void atraso(volatile unsigned int i)
+{
+    while((i--)>0);
+}
+
+
+int main(void)
+{
+    WDTCTL = WDTPW | WDTHOLD;
+    _low_power_mode_1();
+    _BIS_SR(GIE|LPM1_Bits);
+    P1DIR |= LEDS;
+    P1REN |= BIT3;
+    while(1){
+        if((P1IN & BIT3) == 0)
+            P1OUT |= LEDS;
+            atraso(0xffff);
+            P1OUT &= ~LEDS;
+            atraso(0xffff);
+    }
+    return 0;
