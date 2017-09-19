@@ -1,0 +1,121 @@
+1)#include <msp430g2553.h>
+#define LED1 BIT0
+#define LED2 BIT6
+#define LEDS (LED1|LED2)
+#define BTN  BIT3
+
+void delay(volatile unsigned int i)
+{
+    while((i--)>0);
+}
+
+
+    
+void blink(int i)
+{
+    int j;
+    for (j=0;j<=i;j++)
+    {
+        P1OUT |= LED1;
+        delay(0xffff)
+        P1OUT &= ~LED1;
+        delau(0xffff)
+    }
+    return 0;
+}
+int main(void)
+{
+    WDTCTL = WDTPW | WDTHOLD;
+    P1DIR |= 0xFF;
+    P1DIR &= ~BIT1
+    P1REN |= BIT3;
+    INT N;
+    while(1){
+        if((P1IN&BIT1) != 0)
+        {
+            delay(0xffff)
+        }
+
+        
+    }
+    return 0;
+}
+
+2)
+#include <msp430g2553.h>
+#define LED1 BIT0
+#define LED2 BIT6
+#define LEDS (LED1|LED2)
+#define BTN  BIT3
+
+void delay(volatile unsigned int i)
+{
+    while((i--)>0);
+}
+    
+void blink(int i)
+{
+    int j;
+    for (j=0;j<=i;j++)
+    {
+        P1OUT |= LED1;
+        delay(0xffff)
+        P1OUT &= ~LED1;
+        delay(0xffff)
+    }
+    return 0;
+}
+int main(void)
+{
+    WDTCTL = WDTPW | WDTHOLD;
+    P1DIR |= 0xFF;
+    P1DIR &= ~(BIT1+BIT2+BIT4+BIT5)
+    P1REN |= BIT3;
+    INT AUX;
+    while(1){
+        if((P1IN&BIT1) != 0)
+        {
+            AUX=1;
+            blink(AUX);
+        }
+        
+        if((P1IN&(BIT1&BIT2)) != 0)
+                {
+                    AUX=3;
+                    blink(AUX);
+                }
+        if((P1IN&BIT4) != 0)
+                {
+                    AUX=4;
+                    blink(AUX);
+                }
+        if((P1IN&(BIT4&BIT1)) != 0)
+                {
+                    AUX=5;
+                    pisca (N);
+                }
+        if((P1IN&(BIT4&BIT2)) != 0)
+                {
+                    AUX=6;
+                    blink(N);
+                }
+        if((P1IN&(BIT4&BIT2&BIT1)) != 0)
+                {
+                    AUX=7;
+                    blink(N);
+                }
+        if((P1IN&BIT5) != 0)
+                {
+                    AUX=8;
+                    blink(N);
+                }
+        if((P1IN&(BIT4&BIT2)) != 0)
+                {
+                    AUX=9;
+                    blink(N);
+                }
+
+        
+    }
+    return 0;
+}
